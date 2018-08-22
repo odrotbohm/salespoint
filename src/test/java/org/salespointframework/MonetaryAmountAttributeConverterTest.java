@@ -19,9 +19,15 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
+import java.util.Locale;
+
+import javax.money.MonetaryAmount;
+import javax.money.format.MonetaryAmountFormat;
+import javax.money.format.MonetaryFormats;
 
 import org.javamoney.moneta.Money;
 import org.junit.Test;
+import org.salespointframework.core.MonetaryAmountAttributeConverter;
 
 /**
  * Unit tests for {@link MonetaryAmountAttributeConverter}
@@ -65,7 +71,19 @@ public class MonetaryAmountAttributeConverterTest {
 
 	@Test // #156
 	public void deserializesFormattedValues() {
-		assertThat(converter.convertToEntityAttribute("EUR 123,456.78"), is(Money.of(123456.78, "EUR")));
+
+		MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(Locale.ROOT);
+
+		MonetaryAmount source = Money.of(123456.78, "EUR");
+		String formatted = format.format(source);
+
+		System.out.println(formatted); // "EUR 123,456.78", space is a 32 on JDK 8, a 160 on JDK 9 and 10
+		System.out.println((int) formatted.toCharArray()[3]); // JDK 8: 32, JDK 9: JDK 10:
+
+		MonetaryAmount foo = format.parse(formatted);
+		MonetaryAmount result = format.parse("EUR 123,456.78"); // Space is char of 32 (standard space)
+
+		assertThat(converter.convertToEntityAttribute(formatted), is(Money.of(123456.78, "EUR")));
 	}
 
 	@Test // #156

@@ -16,6 +16,7 @@
 
 	<properties>
 		<dev>/dev</dev>
+		<lombok.version>1.18.2</lombok.version>
 	</properties>
 
 	<profiles>
@@ -84,7 +85,8 @@
 		<dependency>
 			<groupId>org.javamoney</groupId>
 			<artifactId>moneta</artifactId>
-			<version>1.1</version>
+			<version>1.2.1</version>
+			<type>pom</type>
 		</dependency>
 
 		<!-- For changelog creation -->
@@ -105,6 +107,11 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
 		</dependency>
 
 	</dependencies>
@@ -160,7 +167,7 @@
 			<plugin>
 				<groupId>org.projectlombok</groupId>
 				<artifactId>lombok-maven-plugin</artifactId>
-				<version>${lombok.version}.0</version>
+				<version>1.18.0.0</version>
 				<configuration>
 					<addOutputDirectory>false</addOutputDirectory>
 					<sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>

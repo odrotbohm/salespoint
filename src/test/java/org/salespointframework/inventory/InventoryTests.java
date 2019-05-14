@@ -43,9 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Oliver Gierke
  */
 @Transactional
-// TODO 02.00 - Switch annotations.
-// @ModuleTest(extraIncludes = "org.salespointframework.catalog")
-@ModuleTest(extraIncludes = "org.salespointframework.catalog", verifyAutomatically = false)
+@ModuleTest(extraIncludes = "org.salespointframework.catalog")
 class InventoryTests {
 
 	@Autowired Inventory<InventoryItem> inventory;

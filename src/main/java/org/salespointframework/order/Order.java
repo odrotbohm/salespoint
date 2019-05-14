@@ -472,8 +472,7 @@ public class Order extends AbstractEntity<OrderIdentifier> {
 
 		this.orderStatus = OrderStatus.COMPLETED;
 
-		// TODO 02.03 - Enable event registration
-		// registerEvent(OrderCompleted.of(this));
+		registerEvent(OrderCompleted.of(this));
 
 		return this;
 	}

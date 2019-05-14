@@ -42,7 +42,7 @@ import org.springframework.util.Assert;
  * {@link ApplicationListener} for {@link OrderCompleted} events to verify that sufficient amounts of the
  * {@link Product} the {@link OrderLine}s contained in the {@link Order} point to are available in the
  * {@link Inventory}.
- * 
+ *
  * @author Oliver Gierke
  * @since 6.3
  */
@@ -59,7 +59,7 @@ public class InventoryOrderEventListener {
 	/**
 	 * Invokes {@link Inventory} checks for all {@link OrderLine} of the {@link Order} in the given {@link OrderCompleted}
 	 * event.
-	 * 
+	 *
 	 * @param event must not be {@literal null}.
 	 * @throws OrderCompletionFailure in case any of the {@link OrderLine} items contained in the order and supported by
 	 *           the configured {@link LineItemFilter} is not available in sufficient quantity.
@@ -81,7 +81,7 @@ public class InventoryOrderEventListener {
 
 	/**
 	 * Rolls back the stock decreases handled for {@link OrderCompleted} events.
-	 * 
+	 *
 	 * @param event must not be {@literal null}.
 	 */
 	@EventListener
@@ -100,7 +100,7 @@ public class InventoryOrderEventListener {
 
 	/**
 	 * Verifies the given {@link OrderLine} for sufficient stock in the {@link Inventory}.
-	 * 
+	 *
 	 * @param orderLine must not be {@literal null}.
 	 * @return
 	 */

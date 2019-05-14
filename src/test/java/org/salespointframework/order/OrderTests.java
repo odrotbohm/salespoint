@@ -20,12 +20,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.salespointframework.core.Currencies.*;
 import static org.salespointframework.order.OrderStatus.*;
 
-import de.olivergierke.moduliths.test.ModuleTest;
-import de.olivergierke.moduliths.test.ModuleTest.BootstrapMode;
-
 import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.salespointframework.AbstractIntegrationTests;
 import org.salespointframework.catalog.Catalog;
 import org.salespointframework.catalog.Product;
 import org.salespointframework.order.ChargeLine.AttachedChargeLine;
@@ -43,9 +41,14 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Oliver Gierke
  */
 @Transactional
-@ModuleTest(mode = BootstrapMode.DIRECT_DEPENDENCIES, //
-		extraIncludes = { "org.salespointframework.catalog" })
-class OrderTests {
+// TODO 03.02 - Enable @ModuleTest
+// @ModuleTest(
+// extraIncludes = { "org.salespointframework.catalog" } //
+// TODO 03.04 - …or include them.
+// , mode = BootstrapMode.DIRECT_DEPENDENCIES //
+// )
+// TODO 03.01 - Remove extends clause
+class OrderTests extends AbstractIntegrationTests {
 
 	@Autowired UserAccountManager userAccountManager;
 	@Autowired OrderManager<Order> orderManager;
@@ -55,6 +58,9 @@ class OrderTests {
 	Order order;
 
 	private static int foobar = 0;
+
+	// TODO 03.03 - Mock direct dependency.
+	// @MockBean BusinessTime time;
 
 	@BeforeEach
 	void before() {

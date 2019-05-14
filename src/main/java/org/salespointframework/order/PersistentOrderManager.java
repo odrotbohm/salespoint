@@ -20,9 +20,11 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
 
+import org.salespointframework.inventory.InventoryFacade;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.time.Interval;
 import org.salespointframework.useraccount.UserAccount;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.util.Streamable;
@@ -42,6 +44,9 @@ class PersistentOrderManager<T extends Order> implements OrderManager<T> {
 
 	private final @NonNull BusinessTime businessTime;
 	private final @NonNull OrderRepository<T> orderRepository;
+
+	// TODO 02.02 - Remove
+	@Autowired InventoryFacade inventory;
 
 	/*
 	 * (non-Javadoc)
@@ -142,6 +147,9 @@ class PersistentOrderManager<T extends Order> implements OrderManager<T> {
 		if (!order.isPaid()) {
 			throw new OrderCompletionFailure(order, "Order is not paid yet!");
 		}
+
+		// TODO 02.01 - Remove
+		inventory.updateInventoryFor(order);
 
 		save((T) order.complete());
 	}

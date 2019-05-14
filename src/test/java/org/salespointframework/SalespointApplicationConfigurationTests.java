@@ -111,6 +111,7 @@ class SalespointApplicationConfigurationTests extends AbstractIntegrationTests {
 		assertThat(environment.getRequiredProperty("spring.datasource.generate-unique-name", boolean.class)).isTrue();
 	}
 
+	// @Modulith
 	@EnableSalespoint("Salespoint")
 	static class SalespointSample {}
 }

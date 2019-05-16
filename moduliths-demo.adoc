@@ -1,0 +1,70 @@
+= Modultiths Demo
+Oliver Drotbohm, 2019
+
+////
+
+- Ausgangspunkt: Catalog, Order, Inventor
+
+- Context: kleines Team -> zwingend separate Microservices?
+    - Prevent degradation
+    - Test individually
+    - Documentation
+
+- Implementierung als ein Deployable
+    - Struktur innerhalb der Codebasis?
+    - Fachliche top-level packages
+////
+
+== The imperative version
+
+=== Catalog module
+* Essentially a aggregate + repository
+* No outgoing dependencies to other Spring components
+* `CatalogIntegrationTests` -> `@SpringBootTest` bootstraps the entire container
+    ** Other annotations exist to horizontally (technically) slice the application
+    ** Can we maybe have that for vertical (business) slices as well?
+* `TODO 01.01` – Replace `@SpringBootTest` with `@ModuleTest`, defer `verifyAutomatically`.
+    ** Explain log output
+        *** `@ModuleTest` analyzes module structure, bootstraps the module the test is located in.
+        *** All bootstrapped modules including shared ones.
+        *** Customizations via the test annotation as well as `@Modulith` (on `@EnableSalespoint`)
+
+=== Inventory module
+
+* `InventoryItem` = `Product` + amount
+* Direct reference to the other aggregate – should this be a by-id reference rather?
+* No component dependencies. But: for tests we need persisted `Product` instances which means we'd want to bootstrap the catalog module as well.
+
+== Events to remove cyclic dependencies
+
+* `InventoryTests` has `verifyAutomatically` set to true. What happens if we remove that? `TODO-02.01`
+* Dependency cycle!
+    ** Component dependency: `PersistentOrderManager` -> `InventoryFacade`
+    ** Type dependency: `InventoryFacade` -> `Order`
+
+* Component dependency is worse as it requires the dependency to be present.
+* Fixes:
+    ** Remove references to `InventoryFacade` following the todos.
+    ** Tweak `InventoryTests` -> no failure on cycle.
+* Summary slides
+    ** BC integration via events.
+    ** Avoid cross-BC component invocations.
+
+=== Order module
+
+* Still uses `@SpringBootTest` in `OrderTests` test
+* Switch to `@ModuleTest`
+    ** `TODO 03.01`, `TODO 03.02` - Fails as `BusinessTime` is missing (see `PersistentOrderManager`).
+    ** `TODO 03.03` - Fix by registering a mock dependency.
+    ** `TODO 03.04` - Fix by including direct dependencies.
+
+== Documentation
+
+- `org.salespointframework.SalespointApplicationConfigurationTests.verifyModularity()`
+- https://st.inf.tu-dresden.de/SalesPoint/salespoint-reference.html#modules.order
+
+== Advanced stuff
+
+=== Defining allowed dependencies explicitly
+
+* `TODO 04-01` - Declare allowed dependency to order module and see the test fail as we violate
